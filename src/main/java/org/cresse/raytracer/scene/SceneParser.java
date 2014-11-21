@@ -4,12 +4,13 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-
+import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
 
 import org.cresse.raytracer.shader.Material;
+import org.cresse.raytracer.shader.ObjectShader;
 import org.cresse.raytracer.shader.TextureMapShader;
 
 /**
@@ -21,7 +22,7 @@ import org.cresse.raytracer.shader.TextureMapShader;
 public class SceneParser {
 
   public Scene parse(){
-    return mp2scene();
+    return cs318scene();
   }
 
   private double dist(Tuple3d p1, Tuple3d p2){
@@ -45,13 +46,13 @@ public class SceneParser {
     scene.setLights(lights);
     
     Camera camera=scene.getCamera();
-    camera.setWidth(320);
-    camera.setHeight(240);
+    camera.setWidth(640);
+    camera.setHeight(480);
     camera.setEye(new Vector3d(2.1,1.3,1.7));
     camera.setFocalLength(dist(camera.getEye(),new Point3d(1.05,0.95,0.85)));
     camera.setFStop(50.0);
     scene.setJitterNum(16);
-    camera.setPinhole(false);
+    camera.setPinhole(true);
     scene.setCamera(camera);
 
     Material y=new Material();
@@ -105,7 +106,7 @@ public class SceneParser {
 
     //sph=new SceneSphere(new Point3d(1.5*Math.sin(theta),1.5*Math.cos(theta),1.2), 0.1, g);
     sph=new SceneSphere(new Point3d(1.05,0.95,0.85), 0.1, r);
-    objects.add(sph);
+    //objects.add(sph);
     
     Object[] oa=objects.toArray();
     SceneObject[] soa=new SceneObject[oa.length];
@@ -416,235 +417,232 @@ public class SceneParser {
     pl.setMaterial(mirror);
     //scene.addObject(pl);
 
-    Object[] oa=objects.toArray();
-    SceneObject[] soa=new SceneObject[oa.length];
-    for (int j = 0; j < soa.length; j++) {
-		soa[i]=(SceneObject)oa[i];
-	}
+    SceneObject[] soa=new SceneObject[objects.size()];
+    objects.toArray(soa);
     scene.setObjects(soa);
     
     scene.setSave(false);
-    scene.setSaveAs("c:\\Documents and Settings\\Adam Cresse\\Desktop\\workspace\\dna_640x480x16_dof.bmp");
+    scene.setSaveAs("dna_640x480x16_dof.bmp");
 
     return scene;
   }
 
-//  private Scene testScene(){
-//    Scene scene=new Scene();
-//    scene.setBgcolor(new Color((float)0.078, (float)0.361, (float)0.753));
-//    Light[] lights={
-//    	new Light(new Point3d(2.0,5.0,2.0), new Color((float)0.333,(float)0.333,(float)0.333)),
-//    	new Light(new Point3d(1.0,5.0,2.0), new Color((float)0.333,(float)0.333,(float)0.333)),
-//    	new Light(new Point3d(2.0,5.0,1.0), new Color((float)0.333,(float)0.333,(float)0.333))
-//    };
-//    scene.setLights(lights);
-//    
-//    Camera camera=scene.getCamera();
-//    camera.setWidth(320);
-//    camera.setHeight(240);
-//    camera.setEye(new Vector3d(2.0,0.25,2.0));
-//    //camera.setEye(new Vector3d(0.0,0.0,2.0));
-//    camera.setAt(new Vector3d(0.0,0.0,0.0));
-//    camera.setUp(new Vector3d(0.0,1.0,0.0));
-//    camera.setFocalLength(dist(camera.getEye(),new Point3d(0.5,-0.5,0.5)));
-//    camera.setFStop(40.0);
-//    //camera.setPinhole(false);
-//    //scene.setJitterNum(16);
-//    camera.setPinhole(true);
-//    scene.setJitterNum(1);
-//    scene.setCamera(camera);
-//
-//    Material red=new Material();
-//    red.setReflDiff(new Color((float)0.8,(float)0.0,(float)0.0));
-//    red.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    red.setShininess(45);
-//
-//    Material blue=new Material();
-//    blue.setReflDiff(new Color((float)0.0,(float)0.0,(float)0.8));
-//    blue.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    blue.setShininess(45);
-//
-//    Material green=new Material();
-//    green.setReflDiff(new Color((float)0.0,(float)0.8,(float)0.0));
-//    green.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    green.setShininess(45);
-//
-//    Material white=new Material();
-//    white.setReflDiff(new Color((float)1.0,(float)1.0,(float)1.0));
-//    white.setShininess(100000);
-//
-//    Material mirror=new Material();
-//    mirror.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
-//    mirror.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
-//    mirror.setShininess(45.2776);
-//
-//    Material glass=new Material();
-//    glass.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
-//    glass.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
-//    //glass.setReflTrans(new Color((float)0.75,(float)0.75,(float)0.75));
-//    glass.setReflTrans(new Color((float)0.8,(float)0.8,(float)0.8));
-//    glass.setIr(1.5);
-//    glass.setShininess(45.2776);
-//
-//    SceneSphere sph;
-//
-//    List<SceneObject> objects=new LinkedList<SceneObject>();
-//    
-//    sph=new SceneSphere(new Point3d(-.5,0.5,-0.5),.25,mirror);
-//    objects.add(sph);
-//
-//    sph=new SceneSphere(new Point3d(0.0,0.0,0.0),.25,mirror);
-//    objects.add(sph);
-//
-//    sph=new SceneSphere(new Point3d(0.5,-0.5,0.5),.25,mirror);
-//    objects.add(sph);
-//
-//    ScenePlane pl;
-//
-//    //left
-//    pl=new ScenePlane();
-//    pl.setNormal(new Vector3d(-1.0,0.0,0.0));
-//    pl.setCenter(new Point3d(-1.0,0.0,0.0));
-//    pl.setMaterial(blue);
-//    pl.setCropped(false);
-//    objects.add(pl);
-//
-//    //right
-//    pl=new ScenePlane();
-//    pl.setNormal(new Vector3d(0.0,0.0,-1.0));
-//    pl.setCenter(new Point3d(0.0,0.0,-1.0));
-//    pl.setMaterial(red);
-//    pl.setCropped(false);
-//    objects.add(pl);
-//
-//
-//    Matrix4d r = new Matrix4d();
-//    r.setIdentity();
-//    r.rotX(-90.0);
-//    Matrix4d t = new Matrix4d();
-//    t.setIdentity();
-//    t.setTranslation(new Vector3d(0.0,0.0,-1.0));
-//    Matrix4d m = new Matrix4d();
-//    m.mul(r,t);
-//    r = new Matrix4d();
-//    r.setIdentity();
-//    r.rotZ(45.0);
-//    m.mul(m,r);
-//
-//    //bottom
-//    pl=new ScenePlane();
-//    //pl.setNormal(new Vector3d(0.0,-1.0,0.0));
-//    //pl.setCenter(new Point3d(0.0,-1.0,0.0));
-//    pl.setTransform(m);
-//      ObjectShader sh=new TextureMapShader("C:\\Documents and Settings\\Adam Cresse\\jbproject\\javaray\\classes\\check.gif",mirror);
-//      pl.setShader(sh);
-//    //pl.setMaterial(white);
-//    pl.setCropped(false);
-//    objects.add(pl);
-//    
-//    Object[] oa=objects.toArray();
-//    SceneObject[] soa=new SceneObject[oa.length];
-//    for (int i = 0; i < soa.length; i++) {
-//		soa[i]=(SceneObject)oa[i];
-//	}
-//    scene.setObjects(soa);
-//    
-//    scene.setSave(!true);
-//    scene.setSaveAs("dof_1024x768x16.bmp");
-//
-//    return scene;
-//  }
-//
-//  private Scene me(){
-//    Scene scene=new Scene();
-//    scene.setBgcolor(new Color((float)0.078, (float)0.361, (float)0.753));
-//    Light[] lights={
-//    	new Light(new Point3d(-1.0,5.0,2.0), Color.white),
-//    	new Light(new Point3d(0.0,5.0,2.0), Color.white),
-//    	new Light(new Point3d(1.0,5.0,2.0), Color.white)
-//    };
-//    scene.setLights(lights);
-//    
-//    Camera camera=scene.getCamera();
-//    camera.setWidth(320);
-//    camera.setHeight(320);
-//    camera.setEye(new Vector3d(0.0,0.0,1.0));
-//    camera.setAt(new Vector3d(0.0,0.0,0.0));
-//    camera.setUp(new Vector3d(0.0,1.0,0.0));
-//    camera.setFocalLength(dist(camera.getEye(),new Point3d(0.5,-0.5,0.5)));
-//    camera.setFStop(50.0);
-//    camera.setPinhole(true);
-//    scene.setJitterNum(1);
-//    //camera.setPinhole(false);
-//    //scene.setJitterNum(16);
-//    scene.setCamera(camera);
-//
-//    Material red=new Material();
-//    red.setReflDiff(new Color((float)0.8,(float)0.0,(float)0.0));
-//    red.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    red.setShininess(45);
-//
-//    Material blue=new Material();
-//    blue.setReflDiff(new Color((float)0.0,(float)0.0,(float)0.8));
-//    blue.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    blue.setShininess(45);
-//
-//    Material green=new Material();
-//    green.setReflDiff(new Color((float)0.0,(float)0.8,(float)0.0));
-//    green.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
-//    green.setShininess(45);
-//
-//    Material white=new Material();
-//    white.setReflDiff(new Color((float)1.0,(float)1.0,(float)1.0));
-//    white.setShininess(100000);
-//
-//    Material mirror=new Material();
-//    mirror.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
-//    mirror.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
-//    mirror.setShininess(45.2776);
-//
-//    Material glass=new Material();
-//    glass.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
-//    glass.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
-//    //glass.setReflTrans(new Color((float)0.75,(float)0.75,(float)0.75));
-//    glass.setReflTrans(new Color((float)0.8,(float)0.8,(float)0.8));
-//    glass.setIr(1.5);
-//    glass.setShininess(45.2776);
-//
-//    SceneSphere sph;
-//    List<SceneObject> objects=new LinkedList<SceneObject>();
-//
-//    sph=new SceneSphere(new Point3d(-.5,0.5,-0.5),.25,mirror);
-//    //scene.addObject(sph);
-//
-//    sph=new SceneSphere(new Point3d(0.0,0.0,0.0),.25,mirror);
-//    //scene.addObject(sph);
-//
-//    sph=new SceneSphere(new Point3d(0.5,-0.5,0.5),.25,mirror);
-//    //scene.addObject(sph);
-//
-//    ScenePlane pl;
-//
-//    //bottom
-//    pl=new ScenePlane();
-//    pl.setNormal(new Vector3d(0.0,0.0,-1.0));
-//    pl.setCenter(new Point3d(0.5,0.0,0.0));
-//    pl.setShader(new TextureMapShader("me.jpg",white));
-//    //pl.setMaterial(white);
-//    pl.setCropped(false);
-//    objects.add(pl);
-//
-//    Object[] oa=objects.toArray();
-//    SceneObject[] soa=new SceneObject[oa.length];
-//    for (int i = 0; i < soa.length; i++) {
-//		soa[i]=(SceneObject)oa[i];
-//	}
-//    scene.setObjects(soa);
-//
-//    scene.setSave(!true);
-//    scene.setSaveAs("dof_640x480x16.bmp");
-//
-//    return scene;
-//
-//  }
+  private Scene testScene(){
+    Scene scene=new Scene();
+    scene.setBgcolor(new Color((float)0.078, (float)0.361, (float)0.753));
+    Light[] lights={
+    	new Light(new Point3d(2.0,5.0,2.0), new Color((float)0.333,(float)0.333,(float)0.333)),
+    	new Light(new Point3d(1.0,5.0,2.0), new Color((float)0.333,(float)0.333,(float)0.333)),
+    	new Light(new Point3d(2.0,5.0,1.0), new Color((float)0.333,(float)0.333,(float)0.333))
+    };
+    scene.setLights(lights);
+    
+    Camera camera=scene.getCamera();
+    camera.setWidth(320);
+    camera.setHeight(240);
+    camera.setEye(new Vector3d(2.0,0.25,2.0));
+    //camera.setEye(new Vector3d(0.0,0.0,2.0));
+    camera.setAt(new Vector3d(0.0,0.0,0.0));
+    camera.setUp(new Vector3d(0.0,1.0,0.0));
+    camera.setFocalLength(dist(camera.getEye(),new Point3d(0.5,-0.5,0.5)));
+    camera.setFStop(40.0);
+    //camera.setPinhole(false);
+    //scene.setJitterNum(16);
+    camera.setPinhole(true);
+    scene.setJitterNum(1);
+    scene.setCamera(camera);
+
+    Material red=new Material();
+    red.setReflDiff(new Color((float)0.8,(float)0.0,(float)0.0));
+    red.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    red.setShininess(45);
+
+    Material blue=new Material();
+    blue.setReflDiff(new Color((float)0.0,(float)0.0,(float)0.8));
+    blue.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    blue.setShininess(45);
+
+    Material green=new Material();
+    green.setReflDiff(new Color((float)0.0,(float)0.8,(float)0.0));
+    green.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    green.setShininess(45);
+
+    Material white=new Material();
+    white.setReflDiff(new Color((float)1.0,(float)1.0,(float)1.0));
+    white.setShininess(100000);
+
+    Material mirror=new Material();
+    mirror.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
+    mirror.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
+    mirror.setShininess(45.2776);
+
+    Material glass=new Material();
+    glass.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
+    glass.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
+    //glass.setReflTrans(new Color((float)0.75,(float)0.75,(float)0.75));
+    glass.setReflTrans(new Color((float)0.8,(float)0.8,(float)0.8));
+    glass.setIr(1.5);
+    glass.setShininess(45.2776);
+
+    SceneSphere sph;
+
+    List<SceneObject> objects=new LinkedList<SceneObject>();
+    
+    sph=new SceneSphere(new Point3d(-.5,0.5,-0.5),.25,mirror);
+    objects.add(sph);
+
+    sph=new SceneSphere(new Point3d(0.0,0.0,0.0),.25,mirror);
+    objects.add(sph);
+
+    sph=new SceneSphere(new Point3d(0.5,-0.5,0.5),.25,mirror);
+    objects.add(sph);
+
+    ScenePlane pl;
+
+    //left
+    pl=new ScenePlane();
+    pl.setNormal(new Vector3d(-1.0,0.0,0.0));
+    pl.setCenter(new Point3d(-1.0,0.0,0.0));
+    pl.setMaterial(blue);
+    pl.setCropped(false);
+    objects.add(pl);
+
+    //right
+    pl=new ScenePlane();
+    pl.setNormal(new Vector3d(0.0,0.0,-1.0));
+    pl.setCenter(new Point3d(0.0,0.0,-1.0));
+    pl.setMaterial(red);
+    pl.setCropped(false);
+    objects.add(pl);
+
+
+    Matrix4d r = new Matrix4d();
+    r.setIdentity();
+    r.rotX(-90.0);
+    Matrix4d t = new Matrix4d();
+    t.setIdentity();
+    t.setTranslation(new Vector3d(0.0,0.0,-1.0));
+    Matrix4d m = new Matrix4d();
+    m.mul(r,t);
+    r = new Matrix4d();
+    r.setIdentity();
+    r.rotZ(45.0);
+    m.mul(m,r);
+
+    //bottom
+    pl=new ScenePlane();
+    //pl.setNormal(new Vector3d(0.0,-1.0,0.0));
+    //pl.setCenter(new Point3d(0.0,-1.0,0.0));
+    pl.setTransform(m);
+      ObjectShader sh=new TextureMapShader("check.gif",mirror);
+      pl.setShader(sh);
+    //pl.setMaterial(white);
+    pl.setCropped(false);
+    objects.add(pl);
+    
+    Object[] oa=objects.toArray();
+    SceneObject[] soa=new SceneObject[oa.length];
+    for (int i = 0; i < soa.length; i++) {
+		soa[i]=(SceneObject)oa[i];
+	}
+    scene.setObjects(soa);
+    
+    scene.setSave(!true);
+    scene.setSaveAs("dof_1024x768x16.bmp");
+
+    return scene;
+  }
+
+  private Scene me(){
+    Scene scene=new Scene();
+    scene.setBgcolor(new Color((float)0.078, (float)0.361, (float)0.753));
+    Light[] lights={
+    	new Light(new Point3d(-1.0,5.0,2.0), Color.white),
+    	new Light(new Point3d(0.0,5.0,2.0), Color.white),
+    	new Light(new Point3d(1.0,5.0,2.0), Color.white)
+    };
+    scene.setLights(lights);
+    
+    Camera camera=scene.getCamera();
+    camera.setWidth(320);
+    camera.setHeight(320);
+    camera.setEye(new Vector3d(0.0,0.0,1.0));
+    camera.setAt(new Vector3d(0.0,0.0,0.0));
+    camera.setUp(new Vector3d(0.0,1.0,0.0));
+    camera.setFocalLength(dist(camera.getEye(),new Point3d(0.5,-0.5,0.5)));
+    camera.setFStop(50.0);
+    camera.setPinhole(true);
+    scene.setJitterNum(1);
+    //camera.setPinhole(false);
+    //scene.setJitterNum(16);
+    scene.setCamera(camera);
+
+    Material red=new Material();
+    red.setReflDiff(new Color((float)0.8,(float)0.0,(float)0.0));
+    red.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    red.setShininess(45);
+
+    Material blue=new Material();
+    blue.setReflDiff(new Color((float)0.0,(float)0.0,(float)0.8));
+    blue.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    blue.setShininess(45);
+
+    Material green=new Material();
+    green.setReflDiff(new Color((float)0.0,(float)0.8,(float)0.0));
+    green.setReflSpec(new Color((float)0.5,(float)0.5,(float)0.5));
+    green.setShininess(45);
+
+    Material white=new Material();
+    white.setReflDiff(new Color((float)1.0,(float)1.0,(float)1.0));
+    white.setShininess(100000);
+
+    Material mirror=new Material();
+    mirror.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
+    mirror.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
+    mirror.setShininess(45.2776);
+
+    Material glass=new Material();
+    glass.setReflDiff(new Color((float)0.4,(float)0.45,(float)0.35));
+    glass.setReflSpec(new Color((float)0.4,(float)0.45,(float)0.35));
+    //glass.setReflTrans(new Color((float)0.75,(float)0.75,(float)0.75));
+    glass.setReflTrans(new Color((float)0.8,(float)0.8,(float)0.8));
+    glass.setIr(1.5);
+    glass.setShininess(45.2776);
+
+    SceneSphere sph;
+    List<SceneObject> objects=new LinkedList<SceneObject>();
+
+    sph=new SceneSphere(new Point3d(-.5,0.5,-0.5),.25,mirror);
+    //scene.addObject(sph);
+
+    sph=new SceneSphere(new Point3d(0.0,0.0,0.0),.25,mirror);
+    //scene.addObject(sph);
+
+    sph=new SceneSphere(new Point3d(0.5,-0.5,0.5),.25,mirror);
+    //scene.addObject(sph);
+
+    ScenePlane pl;
+
+    //bottom
+    pl=new ScenePlane();
+    pl.setNormal(new Vector3d(0.0,0.0,-1.0));
+    pl.setCenter(new Point3d(0.5,0.0,0.0));
+    pl.setShader(new TextureMapShader("me.jpg",white));
+    //pl.setMaterial(white);
+    pl.setCropped(false);
+    objects.add(pl);
+
+    Object[] oa=objects.toArray();
+    SceneObject[] soa=new SceneObject[oa.length];
+    for (int i = 0; i < soa.length; i++) {
+		soa[i]=(SceneObject)oa[i];
+	}
+    scene.setObjects(soa);
+
+    scene.setSave(!true);
+    scene.setSaveAs("dof_640x480x16.bmp");
+
+    return scene;
+
+  }
 }

@@ -1,4 +1,4 @@
-package javaray.logic;
+package org.cresse.raytracer.logic;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;

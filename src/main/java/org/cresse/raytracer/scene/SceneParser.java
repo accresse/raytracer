@@ -1,15 +1,16 @@
-package javaray.scene;
+package org.cresse.raytracer.scene;
 
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-import javaray.shader.Material;
-import javaray.shader.TextureMapShader;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
+
+import org.cresse.raytracer.shader.Material;
+import org.cresse.raytracer.shader.TextureMapShader;
 
 /**
  * Description:

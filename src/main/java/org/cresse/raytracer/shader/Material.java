@@ -1,4 +1,4 @@
-package javaray.shader;
+package org.cresse.raytracer.shader;
 
 import java.awt.Color;
 

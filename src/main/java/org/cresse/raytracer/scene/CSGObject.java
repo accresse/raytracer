@@ -1,9 +1,10 @@
-package javaray.scene;
+package org.cresse.raytracer.scene;
 
-import javaray.logic.Ray;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
+
+import org.cresse.raytracer.logic.Ray;
 
 /**
  * Description:

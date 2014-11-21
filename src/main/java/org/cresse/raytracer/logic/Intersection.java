@@ -1,4 +1,4 @@
-package javaray.logic;
+package org.cresse.raytracer.logic;
 
 public class Intersection {
 	protected int obj;

@@ -1,15 +1,16 @@
-package javaray.logic;
+package org.cresse.raytracer.logic;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import javaray.scene.CSGObject;
-import javaray.scene.SceneObject;
-import javaray.scene.SceneSphere;
-import javaray.shader.Material;
 
 import javax.vecmath.Point3d;
+
+import org.cresse.raytracer.scene.CSGObject;
+import org.cresse.raytracer.scene.SceneObject;
+import org.cresse.raytracer.scene.SceneSphere;
+import org.cresse.raytracer.shader.Material;
 
 /**
  * Description:

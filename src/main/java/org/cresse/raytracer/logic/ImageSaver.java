@@ -1,4 +1,4 @@
-package javaray.logic;
+package org.cresse.raytracer.logic;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

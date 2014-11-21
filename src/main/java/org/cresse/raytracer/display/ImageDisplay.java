@@ -1,4 +1,4 @@
-package javaray.display;
+package org.cresse.raytracer.display;
 
 import java.awt.Color;
 import java.awt.Dimension;

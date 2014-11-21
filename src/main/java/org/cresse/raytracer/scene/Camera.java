@@ -1,4 +1,4 @@
-package javaray.scene;
+package org.cresse.raytracer.scene;
 
 import javax.vecmath.Vector3d;
 

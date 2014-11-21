@@ -1,17 +1,18 @@
-package javaray.scene;
+package org.cresse.raytracer.scene;
 
 import java.awt.Color;
 
-import javaray.logic.Ray;
-import javaray.logic.Tracer;
-import javaray.shader.Material;
-import javaray.shader.ObjectShader;
-import javaray.shader.PhongShader;
 
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
+
+import org.cresse.raytracer.logic.Ray;
+import org.cresse.raytracer.logic.Tracer;
+import org.cresse.raytracer.shader.Material;
+import org.cresse.raytracer.shader.ObjectShader;
+import org.cresse.raytracer.shader.PhongShader;
 
 /**
  * Description:

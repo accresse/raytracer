@@ -1,16 +1,17 @@
-package javaray.shader;
+package org.cresse.raytracer.shader;
 
 import java.awt.Color;
 
-import javaray.logic.Intersection;
-import javaray.logic.Ray;
-import javaray.logic.Tracer;
-import javaray.scene.Light;
-import javaray.scene.Scene;
-import javaray.scene.SceneObject;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
+
+import org.cresse.raytracer.logic.Intersection;
+import org.cresse.raytracer.logic.Ray;
+import org.cresse.raytracer.logic.Tracer;
+import org.cresse.raytracer.scene.Light;
+import org.cresse.raytracer.scene.Scene;
+import org.cresse.raytracer.scene.SceneObject;
 
 public class PhongShader extends ObjectShader {
 

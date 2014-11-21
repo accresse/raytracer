@@ -1,17 +1,18 @@
-package javaray.logic;
+package org.cresse.raytracer.logic;
 
 import java.awt.Color;
 
-import javaray.display.ImageDisplay;
-import javaray.scene.Camera;
-import javaray.scene.Scene;
-import javaray.scene.SceneObject;
-import javaray.scene.ScenePlane;
 
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point4d;
 import javax.vecmath.Vector3d;
+
+import org.cresse.raytracer.display.ImageDisplay;
+import org.cresse.raytracer.scene.Camera;
+import org.cresse.raytracer.scene.Scene;
+import org.cresse.raytracer.scene.SceneObject;
+import org.cresse.raytracer.scene.ScenePlane;
 
 /**
  * Description:
@@ -20,16 +21,23 @@ import javax.vecmath.Vector3d;
  *    each pixel and calculating intersections.
  */
 
-public class Tracer2 extends Tracer{
+public class Tracer extends Thread{
 
   private ImageDisplay display; //where to draw the results
   private Scene scene;          //the object describing the scene
 
   //set display and scene at startup
-  public Tracer2(ImageDisplay display, Scene scene){
-	  super(display,scene);
+  public Tracer(ImageDisplay display, Scene scene){
     this.display=display;
     this.scene=scene;
+  }
+  
+  protected long last=0;
+  protected long time(){
+	  long now=System.currentTimeMillis();
+	  long diff=now-last;
+	  last=now;
+	  return diff;
   }
 
   //thread's body
@@ -82,7 +90,7 @@ public class Tracer2 extends Tracer{
         double[] colTotal={0.0,0.0,0.0};
 
         //do once for center - so we can get pinhole camera when jitterNum=1
-
+        
         //transform pixel
         Point4d pixel=new Point4d(i+0.5, j+0.5, 0.0, 1.0);
         msw.transform(pixel);  //hit pixel with matrix
@@ -141,6 +149,7 @@ public class Tracer2 extends Tracer{
         display.setPixel(i,j,rgb);  //update display
       }
     }
+
     //if scene says to save image
     if(scene.getSave()){
       ImageSaver imgs=new ImageSaver();
@@ -155,6 +164,9 @@ public class Tracer2 extends Tracer{
     ms=ms%60000;
     long secs=ms/1000;
     System.out.println("Done in "+hours+":"+mins+":"+secs);
+    System.out.println(timeInter);
+    System.out.println(timePos);
+    System.out.println(timeClosest);
   }
 
   //Checks for intersection with all objects
@@ -191,15 +203,23 @@ public class Tracer2 extends Tracer{
   public Color color(Ray ray, int obj, int recurse){
     return color(ray,obj,recurse,false);
   }
+  
+  long timeInter=0;
+  long timePos=0;
+  long timeClosest=0;
 
   //Uses Phong equations to calculate color of object at ray intersection
   public Color color(Ray ray, int obj, int recurse, boolean isRefract){
     //compute intersections with all surfaces
+	  time();
 	Intersection inter=checkInter(ray, obj, isRefract);
+	timeInter+=time();
+	
     double closest_t = inter.getDist();
     int closest_obj = inter.getObj();
     Point3d position = ray.getPosition(closest_t);
-
+    timePos+=time();
+    
     //declare color components
     double R=0.0;
     double G=0.0;
@@ -215,11 +235,13 @@ public class Tracer2 extends Tracer{
 
     //otherwise
     else{
+    	time();
       SceneObject closest=(SceneObject)scene.getObjects()[closest_obj];
       Color col=closest.getColor(ray,position,scene,this);
       R=((double)col.getRed())/255.0;
       G=((double)col.getGreen())/255.0;
       B=((double)col.getBlue())/255.0;
+      timeClosest+=time();
     }
 
     //clamp colors [0.0,1.0]

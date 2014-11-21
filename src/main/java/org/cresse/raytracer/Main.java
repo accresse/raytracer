@@ -1,11 +1,12 @@
-package javaray;
+package org.cresse.raytracer;
 
-import javaray.display.ImageDisplay;
-import javaray.logic.Tracer;
-import javaray.scene.Scene;
-import javaray.scene.SceneParser;
 
 import javax.swing.JFrame;
+
+import org.cresse.raytracer.display.ImageDisplay;
+import org.cresse.raytracer.logic.Tracer;
+import org.cresse.raytracer.scene.Scene;
+import org.cresse.raytracer.scene.SceneParser;
 
 /**
  * Description:
